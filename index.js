@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const app = express();
 app.set('trust proxy', true);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // Load reasons from JSON
 const reasons = JSON.parse(fs.readFileSync('./reasons.json', 'utf-8'));
@@ -20,6 +20,12 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
+app.use(express.static(__dirname));
+
+// Serve no.html as the homepage
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/no.html');
+});
 
 // Random rejection reason endpoint
 app.get('/no', (req, res) => {

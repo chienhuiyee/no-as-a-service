@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No-as-a-Service - Professional Rejection Service</title>
+  <meta name="description" content="Professional rejection delivered instantly. The ultimate No-as-a-Service platform.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #c7d2fe 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 28rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 0;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative background elements */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -4rem;
+      right: -4rem;
+      width: 8rem;
+      height: 8rem;
+      background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(239, 68, 68, 0.2));
+      border-radius: 50%;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: -3rem;
+      left: -3rem;
+      width: 6rem;
+      height: 6rem;
+      background: linear-gradient(45deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+      border-radius: 50%;
+    }
+
+    .logo-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo {
+      width: 6rem;
+      height: 6rem;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo::before {
+      content: '✕';
+      color: white;
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .logo-glow {
+      position: absolute;
+      inset: 0;
+      width: 6rem;
+      height: 6rem;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      border-radius: 50%;
+      animation: pulse-glow 2s ease-in-out infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(239, 68, 68, 0.6);
+      }
+    }
+
+    .title {
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #dc2626, #ea580c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 2rem;
+      font-size: 0.875rem;
+    }
+
+    .reason-container {
+      margin-bottom: 2rem;
+      min-height: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reason {
+      color: #374151;
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fade-in 0.6s ease-out forwards;
+    }
+
+    @keyframes fade-in {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .loading {
+      width: 100%;
+    }
+
+    .loading-line {
+      height: 1rem;
+      background: #e5e7eb;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .loading-line:last-child {
+      width: 75%;
+      margin: 0 auto;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .refresh-btn {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      border: none;
+      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .refresh-btn:hover:not(:disabled) {
+      background: linear-gradient(to right, #f97316, #ef4444);
+      box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+      transform: scale(1.05);
+    }
+
+    .refresh-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .refresh-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+
+    .refresh-icon.spinning {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .stats {
+      margin-top: 1.5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+
+    .stats p {
+      margin-bottom: 0.5rem;
+    }
+
+    .stats-line {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 1.5rem;
+      }
+      
+      .title {
+        font-size: 1.5rem;
+      }
+      
+      .reason {
+        font-size: 1.125rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <!-- Logo -->
+      <div class="logo-container">
+        <div class="logo"></div>
+        <div class="logo-glow"></div>
+      </div>
+
+      <!-- Title -->
+      <h1 class="title">No-as-a-Service</h1>
+      <p class="subtitle">Professional rejection, delivered instantly</p>
+
+      <!-- Reason Display -->
+      <div class="reason-container">
+        <div id="reason-content"></div>
+      </div>
+
+      <!-- Refresh Button -->
+      <button class="refresh-btn" onclick="fetchReason()" id="refresh-btn">
+        <svg class="refresh-icon" id="refresh-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        Give me another no
+      </button>
+    </div>
+
+    <!-- Fun statistics -->
+    <div class="stats">
+      <p>Serving professional rejections since 2024</p>
+      <div class="stats-line">
+        <span>99.9% uptime</span>
+        <span>•</span>
+        <span>0% approval rate</span>
+        <span>•</span>
+        <span>∞ reasons</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const reasons = [
+      "Because I said so.",
+      "It's not in the budget.",
+      "We don't have the resources right now.",
+      "That's not our priority.",
+      "It's too risky.",
+      "We need to focus on other things.",
+      "The timing isn't right.",
+      "It doesn't align with our goals.",
+      "We've tried that before.",
+      "It's too complicated.",
+      "Let's revisit this later.",
+      "We need more data first.",
+      "It's not scalable.",
+      "Our users won't understand it.",
+      "It's not worth the effort.",
+      "We have bigger fish to fry.",
+      "It's not our core competency.",
+      "The ROI isn't clear.",
+      "It goes against our principles.",
+      "We're already committed elsewhere."
+    ];
+
+    let isLoading = false;
+
+    function showLoading() {
+      const reasonContent = document.getElementById('reason-content');
+      reasonContent.innerHTML = `
+        <div class="loading">
+          <div class="loading-line"></div>
+          <div class="loading-line"></div>
+        </div>
+      `;
+    }
+
+    function showReason(reason) {
+      const reasonContent = document.getElementById('reason-content');
+      reasonContent.innerHTML = `<p class="reason">"${reason}"</p>`;
+    }
+
+    function showError(message) {
+      const reasonContent = document.getElementById('reason-content');
+      reasonContent.innerHTML = `<p class="reason" style="color: #ef4444;">${message}</p>`;
+    }
+
+    async function fetchReason() {
+      if (isLoading) return;
+      
+      isLoading = true;
+      const refreshBtn = document.getElementById('refresh-btn');
+      const refreshIcon = document.getElementById('refresh-icon');
+      
+      // Update button state
+      refreshBtn.disabled = true;
+      refreshIcon.classList.add('spinning');
+      
+      // Show loading state
+      showLoading();
+      
+      try {
+        // Simulate API call with random reason
+        await new Promise(resolve => setTimeout(resolve, 800));
+        const randomReason = reasons[Math.floor(Math.random() * reasons.length)];
+        showReason(randomReason);
+      } catch (e) {
+        showError('Could not fetch a reason. Please try again.');
+      } finally {
+        isLoading = false;
+        refreshBtn.disabled = false;
+        refreshIcon.classList.remove('spinning');
+      }
+    }
+
+    // Load initial reason
+    window.addEventListener('load', fetchReason);
+  </script>
+</body>
+</html>
