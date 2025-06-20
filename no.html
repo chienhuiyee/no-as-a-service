@@ -138,6 +138,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 0.5rem;
     }
 
     .reason {
@@ -248,6 +249,52 @@
       font-size: 0.75rem;
     }
 
+    .reason-container {
+      margin-bottom: 2rem;
+      min-height: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .copy-btn {
+      background: #fff;
+      border: 2px solid #ef4444;
+      border-radius: 50%;
+      padding: 0.4rem;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+    }
+
+    .copy-btn:hover {
+      background: #fef2f2;
+      border-color: #f97316;
+    }
+
+    .copy-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      display: block;
+    }
+
+    .copy-btn.copied {
+      background: #f97316;
+      border-color: #f97316;
+      animation: pop 0.3s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
     @media (max-width: 640px) {
       .card {
         padding: 1.5rem;
@@ -279,6 +326,9 @@
       <!-- Reason Display -->
       <div class="reason-container">
         <div id="reason-content"></div>
+        <button class="copy-btn" id="copy-btn" title="Copy to clipboard" onclick="copyReason()">
+          <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" fill="#fff" stroke="#ef4444" stroke-width="2"/><rect x="3" y="3" width="13" height="13" rx="2" fill="#fff" stroke="#ef4444" stroke-width="2"/></svg>
+        </button>
       </div>
 
       <!-- Refresh Button -->
@@ -304,29 +354,6 @@
   </div>
 
   <script>
-    const reasons = [
-      "Because I said so.",
-      "It's not in the budget.",
-      "We don't have the resources right now.",
-      "That's not our priority.",
-      "It's too risky.",
-      "We need to focus on other things.",
-      "The timing isn't right.",
-      "It doesn't align with our goals.",
-      "We've tried that before.",
-      "It's too complicated.",
-      "Let's revisit this later.",
-      "We need more data first.",
-      "It's not scalable.",
-      "Our users won't understand it.",
-      "It's not worth the effort.",
-      "We have bigger fish to fry.",
-      "It's not our core competency.",
-      "The ROI isn't clear.",
-      "It goes against our principles.",
-      "We're already committed elsewhere."
-    ];
-
     let isLoading = false;
 
     function showLoading() {
@@ -351,29 +378,36 @@
 
     async function fetchReason() {
       if (isLoading) return;
-      
       isLoading = true;
       const refreshBtn = document.getElementById('refresh-btn');
       const refreshIcon = document.getElementById('refresh-icon');
-      
-      // Update button state
       refreshBtn.disabled = true;
       refreshIcon.classList.add('spinning');
-      
-      // Show loading state
       showLoading();
-      
       try {
-        // Simulate API call with random reason
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const randomReason = reasons[Math.floor(Math.random() * reasons.length)];
-        showReason(randomReason);
+        const res = await fetch('/no');
+        const data = await res.json();
+        showReason(data.reason);
       } catch (e) {
         showError('Could not fetch a reason. Please try again.');
       } finally {
         isLoading = false;
         refreshBtn.disabled = false;
         refreshIcon.classList.remove('spinning');
+      }
+    }
+
+    async function copyReason() {
+      const reasonEl = document.querySelector('#reason-content .reason');
+      if (!reasonEl) return;
+      const text = reasonEl.textContent.replace(/^"|"$/g, '');
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById('copy-btn');
+        btn.classList.add('copied');
+        setTimeout(() => btn.classList.remove('copied'), 700);
+      } catch (e) {
+        alert('Failed to copy!');
       }
     }
 
